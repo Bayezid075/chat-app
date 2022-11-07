@@ -1,3 +1,4 @@
+// external import
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -5,11 +6,17 @@ const dotenv = require("dotenv");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 
-dotenv.config();
+// internal import
+const {
+  defaultError,
+  notFoundError,
+} = require("./middleware/common/errorHandler");
 
-app.get("/", (req, res) => {
-  res.send("Its running now !! ");
-});
+const loginRouter = require("./routes/loginRoute");
+const userRouter = require("./routes/userRoute");
+const inboxRouter = require("./routes/inboxRoute");
+
+dotenv.config();
 
 // database connection
 mongoose
@@ -35,6 +42,17 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // cookie parser
 app.use(cookieParser(process.env.COOKIE_SECRET));
+
+// // Not found error handler
+// app.use(notFoundError);
+
+// // default error handler
+// app.use(defaultError);
+
+// router setup
+app.use("/", loginRouter);
+app.use("/", userRouter);
+app.use("/", inboxRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`server running on port ${process.env.PORT}`);
