@@ -17,8 +17,12 @@ function defaultError(err, req, res, next) {
   // //   res.json(res.locals.error);
   // }
 }
+function reader() {
+  console.log("this is reader");
+}
 
 module.exports = {
   notFoundError,
   defaultError,
+  reader,
 };

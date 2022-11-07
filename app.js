@@ -10,6 +10,7 @@ const cookieParser = require("cookie-parser");
 const {
   defaultError,
   notFoundError,
+  reader,
 } = require("./middleware/common/errorHandler");
 
 const loginRouter = require("./routes/loginRoute");
@@ -42,17 +43,17 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // cookie parser
 app.use(cookieParser(process.env.COOKIE_SECRET));
-
-// // Not found error handler
-// app.use(notFoundError);
-
-// // default error handler
-// app.use(defaultError);
-
 // router setup
+
 app.use("/", loginRouter);
 app.use("/", userRouter);
 app.use("/", inboxRouter);
+
+// // Not found error handler
+app.use(notFoundError);
+
+// // default error handler
+// app.use(defaultError);
 
 app.listen(process.env.PORT, () => {
   console.log(`server running on port ${process.env.PORT}`);
